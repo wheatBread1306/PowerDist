@@ -10,6 +10,8 @@ namespace
         const float sign = std::copysign(1.0f, x);
         return sign * std::exp(power * std::log(ab));
     }
+
+    
 }
 
 void PowerDistProcessor::prepare(double sampleRate, int samplesPerBlock)
@@ -51,7 +53,7 @@ void PowerDistProcessor::makeDistLUT(float curveValue)
 {
     for (size_t i = 0; i < distLUT.size(); ++i)
     {
-        const float x = static_cast<float>(i) / (distLUT.size() - 1) * 2.0f - 1.0f;
+        const float x = static_cast<float>(i) / (distLUT.size() - 1);
         distLUT[i] = powDist(x, curveValue);
     }
 }
