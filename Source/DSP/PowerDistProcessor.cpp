@@ -4,7 +4,7 @@ namespace
 {
     float powDist(float x, float power)
     {
-        jassert(power >= 0.0f);
+        jassert(power > 0.0f);
 
         const float ab = std::abs(x);
         const float sign = std::copysign(1.0f, x);
@@ -30,28 +30,30 @@ void PowerDistProcessor::process(juce::AudioBuffer<float> &buffer)
     const int numChannels = buffer.getNumChannels();
     const int numSamples = buffer.getNumSamples();
 
-    if(curve.isSmoothing()|| !juce::approximatelyEqual(curve.getCurrentValue(), prevCurve)){
+    if (curve.isSmoothing() || !juce::approximatelyEqual(curve.getCurrentValue(), prevCurve))
+    {
         const float currentCurve = curve.getCurrentValue();
         prevCurve = currentCurve;
         makeDistLUT(currentCurve);
     }
 
-    for (int channel = 0; channel < numChannels; ++channel)
+    for (int ch = 0; ch < numChannels; ++ch)
     {
-        float* channelData = buffer.getWritePointer(channel);
+        float *channelData = buffer.getWritePointer(ch);
 
-        for (int sample = 0; sample < numSamples; ++sample)
+        for (int i = 0; i < numSamples; ++i)
         {
-            const float inputSample = channelData[sample];
+            float s = clampSample(channelData[i]);
+            float absS = std::abs(s);
 
-            const float clampedSample = clampSample(inputSample);
+            int idx = static_cast<int>(absS * (distLUT.size() - 1) + 0.5f); // 四捨五入もあり
+            idx = std::min(idx, static_cast<int>(distLUT.size() - 1));
 
-            const float absInput = std::abs(clampedSample);
-            const int lutIndex = static_cast<int>(absInput * (distLUT.size() - 1));
-            const float distSample = distLUT[lutIndex] * std::copysign(1.0f, clampedSample);
-            channelData[sample] = distSample;
+            float output = distLUT[idx] * std::copysign(1.0f, s);
+            channelData[i] = output;
         }
     }
+
     curve.skip(numSamples);
 }
 
