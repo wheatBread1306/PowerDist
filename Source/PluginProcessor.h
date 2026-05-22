@@ -9,6 +9,9 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include <JucePluginDefines.h>
+#include "Parameters/PluginParameters.h"
+#include "DSP/PowerDistProcessor.h"
 
 //==============================================================================
 /**
@@ -29,6 +32,7 @@ public:
 #endif
 
   void processBlock(juce::AudioBuffer<float> &, juce::MidiBuffer &) override;
+  void reset() override;
 
   //==============================================================================
   juce::AudioProcessorEditor *createEditor() override;
@@ -53,8 +57,17 @@ public:
   void getStateInformation(juce::MemoryBlock &destData) override;
   void setStateInformation(const void *data, int sizeInBytes) override;
 
+  juce::AudioProcessorValueTreeState apvts{*this, nullptr, "Parameters", Parameters::createParameterLayout()};
+
 private:
   //==============================================================================
+
+  PowerDistProcessor powerDistProcessor;
+
+  std::atomic<float> *inputGain = {nullptr};
+  std::atomic<float> *outputGain = {nullptr};
+  std::atomic<float> *wetMix = {nullptr};
+  std::atomic<float> *curve = {nullptr};
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerDistAudioProcessor)
 };
