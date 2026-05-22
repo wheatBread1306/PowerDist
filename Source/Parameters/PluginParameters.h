@@ -61,7 +61,7 @@ namespace Parameters
 
         layout.add(std::make_unique<juce::AudioParameterFloat>(
             CURVE_ID, CURVE_NAME,
-            juce::NormalisableRange<float>(0.0f, 1.0f), 0.5f,
+            juce::NormalisableRange<float>(0.1f, 5.0f), 2.0f,
             juce::String(), juce::AudioProcessorParameter::genericParameter,
             [](float value, int)
             { return juce::String(value, 2); },

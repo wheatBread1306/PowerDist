@@ -17,10 +17,11 @@ public:
 private:
     double currentSampleRate{44100.0};
     int currentBlockSize{512};
-    
+
     void makeDistLUT(float curveValue);
 
     std::array<float, 1024> distLUT{};
 
-    juce::SmoothedValue<float> curve{0.0f};
+    juce::SmoothedValue<float> curve{2.0f};
+    float prevCurve{0.0f};
 };

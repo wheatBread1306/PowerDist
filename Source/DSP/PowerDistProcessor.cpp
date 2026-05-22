@@ -16,6 +16,8 @@ void PowerDistProcessor::prepare(double sampleRate, int samplesPerBlock)
 {
     currentSampleRate = sampleRate;
     currentBlockSize = samplesPerBlock;
+
+    curve.reset(sampleRate, 0.01);
 }
 
 void PowerDistProcessor::process(juce::AudioBuffer<float> &buffer)
@@ -23,8 +25,9 @@ void PowerDistProcessor::process(juce::AudioBuffer<float> &buffer)
     const int numChannels = buffer.getNumChannels();
     const int numSamples = buffer.getNumSamples();
 
-    if(curve.isSmoothing()){
+    if(curve.isSmoothing()|| !juce::approximatelyEqual(curve.getCurrentValue(), prevCurve)){
         const float currentCurve = curve.getCurrentValue();
+        prevCurve = currentCurve;
         makeDistLUT(currentCurve);
     }
 
