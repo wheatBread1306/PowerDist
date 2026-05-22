@@ -11,7 +11,10 @@ namespace
         return sign * std::exp(power * std::log(ab));
     }
 
-    
+    float clampSample(float sample)
+    {
+        return std::clamp(sample, -1.0f, 1.0f);
+    }
 }
 
 void PowerDistProcessor::prepare(double sampleRate, int samplesPerBlock)
@@ -40,9 +43,12 @@ void PowerDistProcessor::process(juce::AudioBuffer<float> &buffer)
         for (int sample = 0; sample < numSamples; ++sample)
         {
             const float inputSample = channelData[sample];
-            const float absInput = std::abs(inputSample);
+
+            const float clampedSample = clampSample(inputSample);
+
+            const float absInput = std::abs(clampedSample);
             const int lutIndex = static_cast<int>(absInput * (distLUT.size() - 1));
-            const float distSample = distLUT[lutIndex] * std::copysign(1.0f, inputSample);
+            const float distSample = distLUT[lutIndex] * std::copysign(1.0f, clampedSample);
             channelData[sample] = distSample;
         }
     }
