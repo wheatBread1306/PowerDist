@@ -102,6 +102,12 @@ void PowerDistAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlo
     juce::dsp::ProcessSpec spec{sampleRate, static_cast<juce::uint32>(samplesPerBlock), static_cast<juce::uint32>(getTotalNumInputChannels())};
     inputGainProcessor.prepare(spec);
     outputGainProcessor.prepare(spec);
+
+    inputGainProcessor.setRampDurationSeconds(0.01);
+    outputGainProcessor.setRampDurationSeconds(0.01);
+
+    dryWetMixer.prepare(spec);
+    dryWetMixer.setMixingRule(juce::dsp::DryWetMixer<float>::MixingRule::linear);
 }
 
 void PowerDistAudioProcessor::releaseResources()
@@ -144,14 +150,19 @@ void PowerDistAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juc
     powerDistProcessor.setCurve(curve->load());
     inputGainProcessor.setGainDecibels(inputGain->load());
     outputGainProcessor.setGainDecibels(outputGain->load());
+    dryWetMixer.setWetMixProportion(wetMix->load());
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
+
+    dryWetMixer.pushDrySamples(buffer);
 
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
     inputGainProcessor.process(context);
     powerDistProcessor.process(buffer);
+
+    dryWetMixer.mixWetSamples(buffer);
     outputGainProcessor.process(context);
 }
 
@@ -160,6 +171,7 @@ void PowerDistAudioProcessor::reset()
     powerDistProcessor.reset();
     inputGainProcessor.reset();
     outputGainProcessor.reset();
+    dryWetMixer.reset();
 }
 
 //==============================================================================

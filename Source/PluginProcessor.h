@@ -64,6 +64,7 @@ private:
 
   PowerDistProcessor powerDistProcessor;
   juce::dsp::Gain<float> inputGainProcessor, outputGainProcessor;
+  juce::dsp::DryWetMixer<float> dryWetMixer;
 
   std::atomic<float> *inputGain = {nullptr};
   std::atomic<float> *outputGain = {nullptr};

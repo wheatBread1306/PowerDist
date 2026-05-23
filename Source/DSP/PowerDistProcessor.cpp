@@ -69,5 +69,4 @@ void PowerDistProcessor::makeDistLUT(float curveValue)
 void PowerDistProcessor::reset()
 {
     curve.reset(currentSampleRate, 0.01);
-    distLUT.fill(0.0f);
 }
