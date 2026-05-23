@@ -25,10 +25,11 @@ void PowerDistProcessor::prepare(double sampleRate, int samplesPerBlock)
     curve.reset(sampleRate, 0.01);
 }
 
-void PowerDistProcessor::process(juce::AudioBuffer<float> &buffer)
+
+void PowerDistProcessor::process(juce::dsp::AudioBlock<float> block)
 {
-    const int numChannels = buffer.getNumChannels();
-    const int numSamples = buffer.getNumSamples();
+    const int numChannels = static_cast<int>(block.getNumChannels());
+    const int numSamples = static_cast<int>(block.getNumSamples());
 
     if (curve.isSmoothing() || !juce::approximatelyEqual(curve.getCurrentValue(), prevCurve))
     {
@@ -39,7 +40,7 @@ void PowerDistProcessor::process(juce::AudioBuffer<float> &buffer)
 
     for (int ch = 0; ch < numChannels; ++ch)
     {
-        float *channelData = buffer.getWritePointer(ch);
+        float *channelData = block.getChannelPointer(static_cast<size_t>(ch));
 
         for (int i = 0; i < numSamples; ++i)
         {

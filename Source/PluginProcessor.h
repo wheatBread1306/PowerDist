@@ -62,6 +62,10 @@ public:
 private:
   //==============================================================================
 
+  static constexpr size_t MaxChannels = 2;
+  static constexpr size_t OversamplingStages = 2;
+  static constexpr size_t OversamplingFactor = 1u << OversamplingStages;
+
   PowerDistProcessor powerDistProcessor;
   juce::dsp::Gain<float> inputGainProcessor, outputGainProcessor;
   juce::dsp::DryWetMixer<float> dryWetMixer;
@@ -70,6 +74,12 @@ private:
   std::atomic<float> *outputGain = {nullptr};
   std::atomic<float> *wetMix = {nullptr};
   std::atomic<float> *curve = {nullptr};
+
+  juce::dsp::Oversampling<float> oversamplingX4{MaxChannels,
+                                               OversamplingStages,
+                                               juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR,
+                                               true,
+                                               true};
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerDistAudioProcessor)
 };

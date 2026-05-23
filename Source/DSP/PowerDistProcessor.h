@@ -10,7 +10,7 @@ public:
     ~PowerDistProcessor() = default;
 
     void prepare(double sampleRate, int samplesPerBlock);
-    void process(juce::AudioBuffer<float> &buffer);
+    void process(juce::dsp::AudioBlock<float> block);
     void setCurve(float newCurve) noexcept { curve.setTargetValue(newCurve); }
     void reset();
 

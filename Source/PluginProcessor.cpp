@@ -97,17 +97,30 @@ void PowerDistAudioProcessor::changeProgramName(int index, const juce::String &n
 //==============================================================================
 void PowerDistAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    powerDistProcessor.prepare(sampleRate, samplesPerBlock);
+    oversamplingX4.initProcessing(static_cast<size_t>(samplesPerBlock));
+    oversamplingX4.reset();
 
-    juce::dsp::ProcessSpec spec{sampleRate, static_cast<juce::uint32>(samplesPerBlock), static_cast<juce::uint32>(getTotalNumInputChannels())};
-    inputGainProcessor.prepare(spec);
+    const auto oversampledSampleRate = sampleRate * static_cast<double>(OversamplingFactor);
+    const auto oversampledBlockSize = samplesPerBlock * static_cast<int>(OversamplingFactor);
+
+    powerDistProcessor.prepare(oversampledSampleRate, oversampledBlockSize);
+
+    const auto numChannels = static_cast<juce::uint32>(getTotalNumInputChannels());
+    juce::dsp::ProcessSpec spec{sampleRate, static_cast<juce::uint32>(samplesPerBlock), numChannels};
+    juce::dsp::ProcessSpec oversampledSpec{oversampledSampleRate, static_cast<juce::uint32>(oversampledBlockSize), numChannels};
+
+    inputGainProcessor.prepare(oversampledSpec);
     outputGainProcessor.prepare(spec);
 
     inputGainProcessor.setRampDurationSeconds(0.01);
     outputGainProcessor.setRampDurationSeconds(0.01);
 
-    dryWetMixer.prepare(spec);
+    dryWetMixer.prepare(oversampledSpec);
     dryWetMixer.setMixingRule(juce::dsp::DryWetMixer<float>::MixingRule::linear);
+    dryWetMixer.setWetLatency(0.0f);
+
+    const auto oversamplingLatency = oversamplingX4.getLatencyInSamples();
+    setLatencySamples(juce::roundToInt(oversamplingLatency));
 }
 
 void PowerDistAudioProcessor::releaseResources()
@@ -155,20 +168,26 @@ void PowerDistAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juc
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-    dryWetMixer.pushDrySamples(buffer);
-
     juce::dsp::AudioBlock<float> block(buffer);
-    juce::dsp::ProcessContextReplacing<float> context(block);
-    inputGainProcessor.process(context);
-    powerDistProcessor.process(buffer);
+    auto oversampledBlock = oversamplingX4.processSamplesUp(block);
 
-    dryWetMixer.mixWetSamples(buffer);
+    dryWetMixer.pushDrySamples(oversampledBlock);
+
+    juce::dsp::ProcessContextReplacing<float> oversampledContext(oversampledBlock);
+    inputGainProcessor.process(oversampledContext);
+    powerDistProcessor.process(oversampledBlock);
+    dryWetMixer.mixWetSamples(oversampledBlock);
+
+    oversamplingX4.processSamplesDown(block);
+
+    juce::dsp::ProcessContextReplacing<float> context(block);
     outputGainProcessor.process(context);
 }
 
 void PowerDistAudioProcessor::reset()
 {
     powerDistProcessor.reset();
+    oversamplingX4.reset();
     inputGainProcessor.reset();
     outputGainProcessor.reset();
     dryWetMixer.reset();
