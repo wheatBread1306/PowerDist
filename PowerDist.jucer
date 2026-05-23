@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="VH5F2V" name="PowerDist" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="1.0.0"
+              companyName="wheatBreadPlugins" companyCopyright="&#169; 2026 wheatBread1306. All rights reserved."
+              companyWebsite="https://wheatbread.dev/" companyEmail="info@wheatbread.dev">
   <MAINGROUP id="livAdg" name="PowerDist">
     <GROUP id="{FA3B50DE-9E17-3C6B-22F5-B226D96578D2}" name="Source">
       <GROUP id="{BD0804CD-2059-B6C3-BC4F-36A46496062A}" name="DSP">
@@ -46,7 +48,7 @@
     <VS2026 targetFolder="Builds/VisualStudio2026">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="PowerDist"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="PowerDist"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="PowerDist" extraCompilerFlags="/utf-8"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="C:/Program Files/JUCE/modules"/>
