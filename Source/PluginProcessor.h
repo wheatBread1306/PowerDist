@@ -63,6 +63,7 @@ private:
   //==============================================================================
 
   PowerDistProcessor powerDistProcessor;
+  juce::dsp::Gain<float> inputGainProcessor, outputGainProcessor;
 
   std::atomic<float> *inputGain = {nullptr};
   std::atomic<float> *outputGain = {nullptr};

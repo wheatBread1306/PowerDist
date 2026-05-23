@@ -34,7 +34,7 @@ namespace Parameters
 
         layout.add(std::make_unique<juce::AudioParameterFloat>(
             INPUT_GAIN_ID, INPUT_GAIN_NAME,
-            juce::NormalisableRange<float>(-30.0f, 30.0f), 0.0f,
+            juce::NormalisableRange<float>(-12.0f, 12.0f), 0.0f,
             "dB", juce::AudioProcessorParameter::genericParameter,
             [](float value, int)
             { return juce::String(value, 2); },
@@ -43,7 +43,7 @@ namespace Parameters
 
         layout.add(std::make_unique<juce::AudioParameterFloat>(
             OUTPUT_GAIN_ID, OUTPUT_GAIN_NAME,
-            juce::NormalisableRange<float>(-30.0f, 30.0f), 0.0f,
+            juce::NormalisableRange<float>(-12.0f, 12.0f), 0.0f,
             "dB", juce::AudioProcessorParameter::genericParameter,
             [](float value, int)
             { return juce::String(value, 2); },
@@ -61,7 +61,7 @@ namespace Parameters
 
         layout.add(std::make_unique<juce::AudioParameterFloat>(
             CURVE_ID, CURVE_NAME,
-            juce::NormalisableRange<float>(0.1f, 5.0f), 2.0f,
+            juce::NormalisableRange<float>(0.1f, 10.0f), 2.0f,
             juce::String(), juce::AudioProcessorParameter::genericParameter,
             [](float value, int)
             { return juce::String(value, 2); },

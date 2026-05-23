@@ -98,6 +98,10 @@ void PowerDistAudioProcessor::changeProgramName(int index, const juce::String &n
 void PowerDistAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     powerDistProcessor.prepare(sampleRate, samplesPerBlock);
+
+    juce::dsp::ProcessSpec spec{sampleRate, static_cast<juce::uint32>(samplesPerBlock), static_cast<juce::uint32>(getTotalNumInputChannels())};
+    inputGainProcessor.prepare(spec);
+    outputGainProcessor.prepare(spec);
 }
 
 void PowerDistAudioProcessor::releaseResources()
@@ -138,16 +142,24 @@ void PowerDistAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juc
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     powerDistProcessor.setCurve(curve->load());
+    inputGainProcessor.setGainDecibels(inputGain->load());
+    outputGainProcessor.setGainDecibels(outputGain->load());
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
+    juce::dsp::AudioBlock<float> block(buffer);
+    juce::dsp::ProcessContextReplacing<float> context(block);
+    inputGainProcessor.process(context);
     powerDistProcessor.process(buffer);
+    outputGainProcessor.process(context);
 }
 
 void PowerDistAudioProcessor::reset()
 {
     powerDistProcessor.reset();
+    inputGainProcessor.reset();
+    outputGainProcessor.reset();
 }
 
 //==============================================================================
