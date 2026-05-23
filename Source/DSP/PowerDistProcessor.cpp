@@ -47,10 +47,14 @@ void PowerDistProcessor::process(juce::dsp::AudioBlock<float> block)
             float s = clampSample(channelData[i]);
             float absS = std::abs(s);
 
-            int idx = static_cast<int>(absS * (distLUT.size() - 1) + 0.5f); // 四捨五入もあり
-            idx = std::min(idx, static_cast<int>(distLUT.size() - 1));
+            float pos = absS * (distLUT.size() - 1);
+            int idx0 = static_cast<int>(pos);
+            idx0 = std::min(idx0, static_cast<int>(distLUT.size() - 1));
+            int idx1 = std::min(idx0 + 1, static_cast<int>(distLUT.size() - 1));
+            float frac = pos - static_cast<float>(idx0);
+            float interp = distLUT[idx0] + (distLUT[idx1] - distLUT[idx0]) * frac;
 
-            float output = distLUT[idx] * std::copysign(1.0f, s);
+            float output = interp * std::copysign(1.0f, s);
             channelData[i] = output;
         }
     }

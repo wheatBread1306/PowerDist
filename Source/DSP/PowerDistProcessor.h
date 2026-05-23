@@ -20,7 +20,7 @@ private:
 
     void makeDistLUT(float curveValue);
 
-    std::array<float, 1024> distLUT{};
+    std::array<float, 2048> distLUT{};
 
     juce::SmoothedValue<float> curve{2.0f};
     float prevCurve{0.0f};
