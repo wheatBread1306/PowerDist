@@ -1,4 +1,4 @@
-# PowerDist　- Exponentiation Waveshaper Audio Plugin
+# PowerDist - Exponentiation Waveshaper Audio Plugin
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Framework](https://img.shields.io/badge/framework-JUCE-green.svg)
