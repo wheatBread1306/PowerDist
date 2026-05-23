@@ -63,8 +63,9 @@ With RMS set to 2.0, the curve becomes noticeably steeper at n = 1.0 and 2.0.
 Once the signal crosses a certain level, loudness rises quickly, which feels closer to a gate or fuzz style response.
 This behavior suggests it can also be used as a transient shaper to emphasize attack.
 
-## TODO
+## Related Resources
 
-- Tune parameter ranges
-- Normalize input/output levels
-- Preset save/load
+- [JUCE Official Documentation](https://docs.juce.com/)
+- [JUCE Download](https://juce.com/)
+
+---
