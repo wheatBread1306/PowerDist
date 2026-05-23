@@ -2,7 +2,7 @@
 
 namespace
 {
-    float powDist(float x, float power)
+    inline float powDist(float x, float power)
     {
         jassert(power > 0.0f);
 
@@ -11,7 +11,7 @@ namespace
         return sign * std::exp(power * std::log(ab));
     }
 
-    float clampSample(float sample)
+    inline float clampSample(float sample)
     {
         return std::clamp(sample, -1.0f, 1.0f);
     }
