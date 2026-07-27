@@ -22,6 +22,14 @@ Uses 4x oversampling and a LUT-based wave-shaping path.
 - Visual Studio for Windows (uses Builds/VisualStudio2026)
 - C++17 or later
 
+  ## License
+
+This project is open-source and available under the [MIT License](LICENSE).
+
+> [!NOTE]
+> The JUCE library code used in this project is licensed under AGPLv3. 
+> While my original code is provided under the MIT License, please be aware that many parts of it depend on the JUCE framework.
+
 ## Build (Windows)
 
 1. Open PowerDist.jucer in Projucer
