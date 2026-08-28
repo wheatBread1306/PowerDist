@@ -7,21 +7,21 @@
   <MAINGROUP id="livAdg" name="PowerDist">
     <GROUP id="{FA3B50DE-9E17-3C6B-22F5-B226D96578D2}" name="Source">
       <GROUP id="{BD0804CD-2059-B6C3-BC4F-36A46496062A}" name="DSP">
-        <FILE id="GpUKJN" name="PowerDistProcessor.cpp" compile="1" resource="0"
+        <FILE id="zVgdSe" name="PowerDistProcessor.cpp" compile="1" resource="0"
               file="Source/DSP/PowerDistProcessor.cpp"/>
-        <FILE id="JZQeiR" name="PowerDistProcessor.h" compile="0" resource="0"
+        <FILE id="fKXCk8" name="PowerDistProcessor.h" compile="0" resource="0"
               file="Source/DSP/PowerDistProcessor.h"/>
       </GROUP>
       <GROUP id="{21517C0E-4C9B-9A98-0172-EC6BCAE95EDE}" name="Parameters">
-        <FILE id="hYifIe" name="PluginParameters.h" compile="0" resource="0"
+        <FILE id="xVYlyr" name="PluginParameters.h" compile="0" resource="0"
               file="Source/Parameters/PluginParameters.h"/>
       </GROUP>
-      <FILE id="ghgyNq" name="PluginEditor.cpp" compile="1" resource="0"
+      <FILE id="KtMAQL" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="W5ucMA" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
-      <FILE id="i6RB0m" name="PluginProcessor.cpp" compile="1" resource="0"
+      <FILE id="KC16yO" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="G4SCqT" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
-      <FILE id="YVPDZN" name="PluginProcessor.h" compile="0" resource="0"
+      <FILE id="PojtbS" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
     </GROUP>
   </MAINGROUP>

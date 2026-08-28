@@ -64,9 +64,11 @@ void PowerDistProcessor::process(juce::dsp::AudioBlock<float> block)
 
 void PowerDistProcessor::makeDistLUT(float curveValue)
 {
+    constexpr float inv = 1.0f / static_cast<float>(distLUT.size() - 1)
+
     for (size_t i = 0; i < distLUT.size(); ++i)
     {
-        const float x = static_cast<float>(i) / (distLUT.size() - 1);
+        const float x = static_cast<float>(i) * inv;
         distLUT[i] = powDist(x, curveValue);
     }
 }
