@@ -15,13 +15,11 @@ public:
     void reset();
 
 private:
+    std::array<float, 2048> distLUT{};
+    juce::SmoothedValue<float> curve{2.0f};
     double currentSampleRate{44100.0};
+    float prevCurve{0.0f};
     int currentBlockSize{512};
 
     void makeDistLUT(float curveValue);
-
-    std::array<float, 2048> distLUT{};
-
-    juce::SmoothedValue<float> curve{2.0f};
-    float prevCurve{0.0f};
 };
